@@ -34,19 +34,31 @@ async function run() {
     const cartCollection = client.db('productDB').collection('cart');
 
 
-    app.get('/product', async(req, res) =>{
-        const cursor = productCollection.find();
-        const result = await cursor.toArray();
-        res.send(result);
+    app.get('/product', async (req, res) => {
+      const cursor = productCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
     })
 
 
-    app.post('/product', async(req, res) =>{
-        const newProduct = req.body;
-        console.log(newProduct);
-        const result = await productCollection.insertOne(newProduct);
-        res.send(result);
+    app.post('/product', async (req, res) => {
+      const newProduct = req.body;
+      console.log(newProduct);
+      const result = await productCollection.insertOne(newProduct);
+      res.send(result);
     })
+
+    app.post('/cart', async (req, res) => {
+      const cartProduct = req.body;
+      console.log(cartProduct);
+      const result = await cartCollection.insertOne(cartProduct);
+      res.send(result);
+    })
+
+    
+    
+
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -59,13 +71,13 @@ async function run() {
 run().catch(console.dir);
 
 
-app.get('/', (req, res) =>{
-    res.send('Server is running')
+app.get('/', (req, res) => {
+  res.send('Server is running')
 })
 
 
 
 
-app.listen(port, ()=>{
-    console.log(`Server is running on port ${port}`)
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`)
 })
