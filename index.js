@@ -29,29 +29,23 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
+    // create a pruduct collection under the productDB database
     const productCollection = client.db('productDB').collection('product');
 
+    // create a cart collection under the productDB database
     const cartCollection = client.db('productDB').collection('cart');
 
-
+    //read the product data from the database 
     app.get('/product', async (req, res) => {
       const cursor = productCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     })
 
-
+    //read the cart data from the database
     app.get('/cart', async (req, res) => {
       const cursor = cartCollection.find();
       const result = await cursor.toArray();
-      res.send(result);
-    })
-
-
-    app.post('/product', async (req, res) => {
-      const newProduct = req.body;
-      console.log(newProduct);
-      const result = await productCollection.insertOne(newProduct);
       res.send(result);
     })
 
@@ -59,6 +53,13 @@ async function run() {
       const cartProduct = req.body;
       console.log(cartProduct);
       const result = await cartCollection.insertOne(cartProduct);
+      res.send(result);
+    })
+
+    app.post('/product', async (req, res) => {
+      const newProduct = req.body;
+      console.log(newProduct);
+      const result = await productCollection.insertOne(newProduct);
       res.send(result);
     })
 
@@ -90,8 +91,6 @@ async function run() {
       res.send(result);
     })
 
-
-
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
@@ -106,8 +105,6 @@ run().catch(console.dir);
 app.get('/', (req, res) => {
   res.send('Server is running')
 })
-
-
 
 
 app.listen(port, () => {
